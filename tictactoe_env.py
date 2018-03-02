@@ -1,6 +1,7 @@
 class TicTacToeEnv:
 
 	def __init__(self, field_size):
+		self.__game_ended = False;
 		self.__reward = 10;
 		self.__last_played = None
 		self.__field_size = field_size		
@@ -24,13 +25,13 @@ class TicTacToeEnv:
 			print()
 
 	
-	def recalculate_field_score(self, player_move):
+	def detect_winning_combination(self, player_move):
 		# For calculating winning combination there are 3 variables:
-		# h_score - horizaontal lines score, one value for each row in the field,
+		# h_score - horizontal lines score, one value for each row in the field,
 		# v_score - vertical lines score,
 		# d_score - diagonal lines score.
 		# After every move this scores are recalculated according to the following rules:
-		# +1 for 'x', +2 for 'o', and therefore if there is 3 or 6 detected in the score
+		# +1 for 'x', +100 for 'o', and therefore if there is 3 or 300 detected in the score
 		# variables mentioned above, we have a winner ('x'-player or 'o'-player respectively).
 		i = player_move[0]
 		j = player_move[1]
@@ -60,12 +61,16 @@ class TicTacToeEnv:
 				(self.__v_score[i] == x_win_score) or 
 				(self.__v_score[i] == o_win_score) ):
 				print('Winner!')
-				return 1
+				self.__game_ended = 1
+				return True
 
 		for i in range(0,2):
 			if(self.__d_score[i] == x_win_score) or (self.__d_score[i] == o_win_score):
 				print('Winner!')
-				return 1
+				self.__game_ended = True
+				return True
+		# or return 0 instead
+		return 0	
 	
 
 	def state(self):
@@ -73,9 +78,12 @@ class TicTacToeEnv:
 
 
 	def reward(self):
-		return self.__reward
-
+		if self.__game_ended: 
+			return self.__reward
+		else:
+			return 0
 	
+
 	def step(self, player_mark, player_move):
 		# player_move is the coordinates list [x, y] where to place 'x' or 'o'
 		# player_mark is 'o' or 'x'
@@ -87,7 +95,8 @@ class TicTacToeEnv:
 			print("This position is already occupuied!")
 			return
 		self.render_field()
-		return self.recalculate_field_score(player_move)
+		done = self.detect_winning_combination(player_move)
+		return self.reward, self.state, done 
 				
 
 	def start_game(self, player_1, player_2):
