@@ -86,9 +86,16 @@ class TicTacToeEnv:
 	
 
 	def state(self):
-		# return field array by value, not by reference
-		return deepcopy(self.__field)
-
+		# return string representation of the field:
+		#[['x','o','x'],['o','-','o'],['x','-','x']] will returned
+		# as 'xoxo-ox-x'. Need this for being able to add this
+		# string representation as a key to the values dict
+		string_repr = ''
+		for i in range(0, self.__field_size):
+			for j in range(0, self.__field_size):
+				string_repr += self.__field[i][j]
+		return string_repr
+	
 
 	def reward(self):
 		if self.__game_ended and self.__tie: 
