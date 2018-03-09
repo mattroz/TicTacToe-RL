@@ -1,9 +1,13 @@
+from copy import deepcopy
+
 class TicTacToeEnv:
 
 	def __init__(self, field_size):
 		self.__game_ended = False;
+		self.__tie = False
 		self.__reward = 10;
 		self.__last_played = None
+		self.__restricted_move = False
 		self.__field_size = field_size		
 		self.__delta = {'x': 1, 'o': 100, '-': 0}
 		self.amount_to_win = 3
@@ -11,12 +15,13 @@ class TicTacToeEnv:
 		self.__v_score = [0 for x in range(0, self.__field_size)] 
 		self.__d_score = [0,0]
 
-
 		# Fill game field
 		self.__field = [['-' for i in range(0, self.__field_size)] 
 							for j in range(0, self.__field_size)]
 		self.__occupied_positions = [[0 for x in range(0, self.__field_size)] 
 							for j in range(0, self.__field_size)]
+		self.__number_of_unoccupied_positions = self.__field_size * self.__field_size
+
 
 	def render_field(self):
 		for i in range(0, self.__field_size):
@@ -61,7 +66,7 @@ class TicTacToeEnv:
 				(self.__v_score[i] == x_win_score) or 
 				(self.__v_score[i] == o_win_score) ):
 				print('Winner!')
-				self.__game_ended = 1
+				self.__game_ended = True
 				return True
 
 		for i in range(0,2):
@@ -69,38 +74,51 @@ class TicTacToeEnv:
 				print('Winner!')
 				self.__game_ended = True
 				return True
-		# or return 0 instead
-		return 0	
+
+		# if two conditions above are False and there is no unoccupied positions => it's tie
+		if self.__number_of_unoccupied_positions == 0:
+			print('Tie!')
+			self.__tie = True
+			self.__game_ended = True
+			return True
+		else:
+			return False	
 	
 
 	def state(self):
-		return self.__field
+		# return field array by value, not by reference
+		return deepcopy(self.__field)
 
 
 	def reward(self):
-		if self.__game_ended: 
+		if self.__game_ended and self.__tie: 
+			return self.__reward/2
+		elif self.__game_ended:
 			return self.__reward
+		elif self.__restricted_move:
+			self.__resticted_move = False
+			return -5
 		else:
-			return 0
+			return 1
 	
 
 	def step(self, player_mark, player_move):
 		# player_move is the coordinates list [x, y] where to place 'x' or 'o'
 		# player_mark is 'o' or 'x'
-		row, column = player_move[0], player_move[1]
+		row, column = player_move[0], player_move[1]		
 		if(self.__occupied_positions[row][column] == 0):
 			self.__field[row][column] = player_mark
 			self.__occupied_positions[row][column] = 1
+			self.__number_of_unoccupied_positions -= 1
 		else:
 			print("This position is already occupuied!")
-			return
+			self.__restricted_move = True
+			return self.reward(), self.state(), False
 		self.render_field()
 		done = self.detect_winning_combination(player_move)
-		return self.reward, self.state, done 
+		return self.reward(), self.state(), done 
 				
 
 	def start_game(self, player_1, player_2):
 		if player_1 == 0 or player_2 == 0:
 			is_human = 1
-		
-
