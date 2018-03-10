@@ -46,6 +46,8 @@ class RLAgent:
 		if state not in self._qvalues.keys():
 			# if it is not, add the new state to the Q values table and init values with 0s 
 			self._qvalues.update({state: [np.random.rand() for x in range(0, self._number_of_actions)]})	
+			#self._qvalues.update({state: [0 for x in range(0, self._number_of_actions)]})	
+			
 		self._previous_state, self._current_state = self._current_state, state
 	
 	
