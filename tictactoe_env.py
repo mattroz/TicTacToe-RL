@@ -31,13 +31,15 @@ class TicTacToeEnv:
 
 	
 	def detect_winning_combination(self, player_move):
-		# For calculating winning combination there are 3 variables:
-		# h_score - horizontal lines score, one value for each row in the field,
-		# v_score - vertical lines score,
-		# d_score - diagonal lines score.
-		# After every move this scores are recalculated according to the following rules:
-		# +1 for 'x', +100 for 'o', and therefore if there is 3 or 300 detected in the score
-		# variables mentioned above, we have a winner ('x'-player or 'o'-player respectively).
+		'''
+			For calculating winning combination there are 3 variables:
+			h_score - horizontal lines score, one value for each row in the field,
+		 	v_score - vertical lines score,
+		 	d_score - diagonal lines score.
+		 	After every move this scores are recalculated according to the following rules:
+		 	+1 for 'x', +100 for 'o', and therefore if there is 3 or 300 detected in the score
+		 	variables mentioned above, we have a winner ('x'-player or 'o'-player respectively).
+		'''
 		i = player_move[0]
 		j = player_move[1]
 		x_win_score = self.amount_to_win * self.__delta['x']
@@ -126,6 +128,5 @@ class TicTacToeEnv:
 		return self.reward(), self.state(), done 
 				
 
-	def start_game(self, player_1, player_2):
-		if player_1 == 0 or player_2 == 0:
-			is_human = 1
+	def reset(self):
+		self.__init__(self.__field_size)

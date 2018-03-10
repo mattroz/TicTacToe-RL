@@ -11,7 +11,6 @@ class RLAgent:
 		self.marker = marker
 		self._current_state = None
 		self._previous_state = None
-		self._previous_action = None
 		self._last_action = None
 		self._action_to_coordinates_map = {}
 		# Fill a2c map:
@@ -23,14 +22,20 @@ class RLAgent:
 
 	
 	def act(self):
-		# Determine the most profitable action to execute
-		# from the current state
-		value = self.maxQ(self._current_state)
-		action = self._qvalues[self._current_state].index(value)
-		self._last_action = action
-		print('action: ', action)
-		return self._action_to_coordinates_map[action]
-	
+		# Roll the dice for random choice:
+		dice = np.random.rand()
+		if dice > self.__epsilon:
+			# Determine the most profitable action to execute
+			# from the current state.
+			value = self.maxQ(self._current_state)
+			action = self._qvalues[self._current_state].index(value)
+			self._last_action = action
+			return self._action_to_coordinates_map[action]
+		else:
+			random_action = np.random.randint(self._number_of_actions)
+			self._last_action = random_action
+			return self._action_to_coordinates_map[random_action]		
+
 	
 	def maxQ(self, state):
 		max_q_value = max(self._qvalues[state])
