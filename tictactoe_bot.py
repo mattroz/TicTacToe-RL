@@ -2,11 +2,11 @@ import numpy as np
 
 class RLAgent:
 
-	def __init__(self, marker, field_size=3, learning_rate=0.3):
-		self._observation = []
+	def __init__(self, marker, field_size=3, learning_rate=0.3, discount_factor=0.5, epsilon=0.3):
 		self._qvalues = {}
 		self._learning_rate = learning_rate
-		self._discount_factor = 0.5
+		self._discount_factor = discount_factor
+		self.__epsilon = epsilon
 		self._number_of_actions = field_size**2
 		self.marker = marker
 		self._current_state = None
