@@ -11,7 +11,7 @@ class RLAgent:
 		self.marker = marker
 		self._current_state = None
 		self._previous_state = None
-		self._last_action = None
+		self._last_action = 0
 		self._action_to_coordinates_map = {}
 		# Fill a2c map:
 		act_idx = 0
@@ -30,7 +30,16 @@ class RLAgent:
 			value = self.maxQ(self._current_state)
 			action = self._qvalues[self._current_state].index(value)
 			self._last_action = action
+			# Coords where to place mark on the game field
+			coordinates = self._action_to_coordinates_map[action]
+			# If desired position is unoccupied, place the mark
+			#if self._current_state[coordinates[0]][coordinates[1]] == '-':
 			return self._action_to_coordinates_map[action]
+			# Else choose the less valuable action
+			#else:
+				#TODO	
+				
+
 		else:
 			random_action = np.random.randint(self._number_of_actions)
 			self._last_action = random_action
