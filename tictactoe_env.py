@@ -105,8 +105,8 @@ class TicTacToeEnv:
 		elif self.__game_ended:
 			return self.__reward
 		elif self.__restricted_move:
-			self.__resticted_move = False
-			return -5
+			self.__restricted_move = False
+			return -1.5
 		else:
 			return 1
 	
