@@ -24,6 +24,7 @@ class TicTacToeEnv:
 
 
 	def render_field(self):
+		print()
 		for i in range(0, self.__field_size):
 			for j in range(0, self.__field_size):
 				print(self.__field[i][j], end=" ")
@@ -111,7 +112,7 @@ class TicTacToeEnv:
 			return 1
 	
 
-	def step(self, player_mark, player_move):
+	def step(self, player_mark, player_move, render=True):
 		# player_move is the coordinates list [x, y] where to place 'x' or 'o'
 		# player_mark is 'o' or 'x'
 		row, column = player_move[0], player_move[1]		
@@ -123,7 +124,7 @@ class TicTacToeEnv:
 			print("This position is already occupuied!")
 			self.__restricted_move = True
 			return self.reward(), self.state(), False
-		self.render_field()
+		if render: self.render_field()
 		done = self.detect_winning_combination(player_move)
 		return self.reward(), self.state(), done 
 				
