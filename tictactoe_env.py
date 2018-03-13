@@ -68,19 +68,19 @@ class TicTacToeEnv:
 				(self.__h_score[i] == o_win_score) or 
 				(self.__v_score[i] == x_win_score) or 
 				(self.__v_score[i] == o_win_score) ):
-				print('Winner!')
+				#print('Winner!')
 				self.__game_ended = True
 				return True
 
 		for i in range(0,2):
 			if(self.__d_score[i] == x_win_score) or (self.__d_score[i] == o_win_score):
-				print('Winner!')
+				#print('Winner!')
 				self.__game_ended = True
 				return True
 
 		# if two conditions above are False and there is no unoccupied positions => it's tie
 		if self.__number_of_unoccupied_positions == 0:
-			print('Tie!')
+			#print('Tie!')
 			self.__tie = True
 			self.__game_ended = True
 			return True
@@ -121,7 +121,7 @@ class TicTacToeEnv:
 			self.__occupied_positions[row][column] = 1
 			self.__number_of_unoccupied_positions -= 1
 		else:
-			print("This position is already occupuied!")
+			if render: print("This position is already occupuied!")
 			self.__restricted_move = True
 			return self.reward(), self.state(), False
 		if render: self.render_field()
