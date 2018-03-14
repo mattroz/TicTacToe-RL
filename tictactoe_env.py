@@ -86,7 +86,12 @@ class TicTacToeEnv:
 			return True
 		else:
 			return False	
+
 	
+	def tie(self):
+		return self.__tie
+
+
 
 	def state(self):
 		# return string representation of the field:
