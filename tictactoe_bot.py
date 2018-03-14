@@ -37,9 +37,7 @@ class RLAgent:
 			return self._action_to_coordinates_map[action]
 			# Else choose the less valuable action
 			#else:
-				#TODO	
-				
-
+				#TODO
 		else:
 			random_action = np.random.randint(self._number_of_actions)
 			self._last_action = random_action
